@@ -22,6 +22,9 @@ public class HelloWorldConfiguration extends Configuration {
     @NotNull
     @JsonProperty
     private DatabaseConfiguration database = new DatabaseConfiguration();
+    
+    @JsonProperty
+    private HibernateConfiguration hibernate = new HibernateConfiguration();
 
     public String getTemplate() {
         return template;
@@ -38,4 +41,8 @@ public class HelloWorldConfiguration extends Configuration {
     public DatabaseConfiguration getDatabaseConfiguration() {
         return database;
     }
+    
+    public HibernateConfiguration getHibernate() {
+		return hibernate;
+	}
 }

@@ -7,6 +7,7 @@ import com.example.helloworld.core.Template;
 import com.example.helloworld.core.User;
 import com.example.helloworld.db.PeopleDAO;
 import com.example.helloworld.health.TemplateHealthCheck;
+import com.example.helloworld.resources.FunResource;
 import com.example.helloworld.resources.HelloWorldResource;
 import com.example.helloworld.resources.PeopleResource;
 import com.example.helloworld.resources.PersonResource;
@@ -41,7 +42,8 @@ public class HelloWorldService extends Service<HelloWorldConfiguration> {
         final DatabaseFactory factory = new DatabaseFactory(environment);
         final Database db = factory.build(configuration.getDatabaseConfiguration(), "h2");
         final PeopleDAO peopleDAO = db.onDemand(PeopleDAO.class);
-
+        final HibernateFactory hibFactory = new HibernateFactory(environment);
+        final Hibernate hib = hibFactory.build(configuration.getHibernate(), "hibernate");
 
         environment.addHealthCheck(new TemplateHealthCheck(template));
         environment.addResource(new HelloWorldResource(template));
@@ -49,6 +51,7 @@ public class HelloWorldService extends Service<HelloWorldConfiguration> {
 
         environment.addResource(new PeopleResource(peopleDAO));
         environment.addResource(new PersonResource(peopleDAO));
+        environment.addResource(new FunResource(hib));
     }
 
 }

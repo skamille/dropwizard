@@ -17,6 +17,22 @@ database:
   # the JDBC URL
   url: jdbc:h2:target/example
 
+hibernate:
+
+  # the name of your JDBC driver
+  dialect: org.hibernate.dialect.H2Dialect
+
+  # the username
+  username: sa
+
+  # the password
+  password: sa
+
+  # the JDBC URL
+  url: jdbc:h2:target/example
+  
+  entityClasses: [com.example.helloworld.db.FunDAO]
+
 # HTTP-specific options.
 http:
 
