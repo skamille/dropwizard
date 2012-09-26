@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="Fun")
 public class FunDAO {
-	@Column
+	
 	public String model; // eg. "DVF1"
 	@Id
 	@GeneratedValue(generator="increment")
@@ -33,7 +33,7 @@ public class FunDAO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+	@Column
 	public String getModel() {
 		return model;
 	}

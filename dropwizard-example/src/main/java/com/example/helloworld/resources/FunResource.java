@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.hibernate.Criteria;
@@ -26,26 +27,21 @@ public class FunResource {
 	}
 	
 	@POST
-	public String createFun(String event) {
-		
+	public String createFun(@QueryParam(value="event") String event) {		
 		Session sess = hib.getSessionFactory().openSession();
 		sess.beginTransaction();
-		FunDAO fun = new FunDAO(event);
-		/*Transaction txn = sess.beginTransaction();
-		txn.begin();*/
-		sess.save(fun);
+		FunDAO fun = new FunDAO(event);	
+		sess.save(fun);		
 		sess.getTransaction().commit();
-	//	txn.commit();
-		sess.disconnect();
-		System.out.println(fun.getModel());
+		sess.disconnect();	
 		return fun.getModel();
 	}
 	
 	@GET
-	public List<FunDAO> getFun(String model) {
+	public List<FunDAO> getFun(@QueryParam(value="event")String event) {
 		Session sess = hib.getSessionFactory().openSession();
 		Criteria crit = sess.createCriteria(FunDAO.class);
-		//crit.add(Restrictions.eq("model", model));
+		crit.add(Restrictions.eq("model", event));
 		List fun = crit.list();
 		List<FunDAO> funList = Lists.newArrayList();
 		for(Object o : fun) {
