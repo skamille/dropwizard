@@ -20,34 +20,41 @@ import com.google.common.collect.Lists;
 @Path("/fun")
 @Produces(MediaType.APPLICATION_JSON)
 public class FunResource {
-	
+
 	private final Hibernate hib;
 	public FunResource(Hibernate hibernate) {
 		hib = hibernate;
 	}
-	
+
 	@POST
 	public String createFun(@QueryParam(value="event") String event) {		
-		Session sess = hib.getSessionFactory().openSession();
-		sess.beginTransaction();
-		FunDAO fun = new FunDAO(event);	
-		sess.save(fun);		
-		sess.getTransaction().commit();
-		sess.disconnect();	
-		return fun.getModel();
+		Session sess = hib.openSession();
+		try {
+			sess.beginTransaction();
+			FunDAO fun = new FunDAO(event);	
+			sess.save(fun);		
+			sess.getTransaction().commit();		
+			return fun.getModel();
+		} finally {
+			hib.closeSession();
+		}
 	}
-	
+
 	@GET
 	public List<FunDAO> getFun(@QueryParam(value="event")String event) {
-		Session sess = hib.getSessionFactory().openSession();
-		Criteria crit = sess.createCriteria(FunDAO.class);
-		crit.add(Restrictions.eq("model", event));
-		List fun = crit.list();
-		List<FunDAO> funList = Lists.newArrayList();
-		for(Object o : fun) {
-			funList.add((FunDAO)o);
+		Session sess = hib.openSession();
+		try {
+			Criteria crit = sess.createCriteria(FunDAO.class);
+			crit.add(Restrictions.eq("model", event));
+			List fun = crit.list();
+			List<FunDAO> funList = Lists.newArrayList();
+			for(Object o : fun) {
+				funList.add((FunDAO)o);
+			}
+			return funList;
+		}finally {
+			hib.closeSession();
 		}
-		return funList;
 	}
 
 
